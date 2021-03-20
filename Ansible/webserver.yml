@@ -1,0 +1,24 @@
+- hosts: vb
+  tasks:
+          - package:
+                  name: "httpd"
+                  state: present
+          - file:
+                  state: directory
+                  path: "/var/www/sai"
+          - template:
+                  dest: "/etc/httpd/conf.d/sai.conf"
+                  src: "templates/sai.conf.j2"
+          - copy:
+                  dest: "/var/www/sai/index.html"
+                  content: "This is the webpage configured by Ansible from Old file"
+          - service:
+                  name: "httpd"
+                  state: restarted
+                  enabled: yes  
+          - firewalld:
+                  port: "8080/tcp"
+                  state: enabled
+                  permanent: yes
+                  immediate: yes
+
