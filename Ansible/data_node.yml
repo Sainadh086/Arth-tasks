@@ -1,0 +1,25 @@
+#Data Node
+
+- name: Configuring Hadoop for Data Node
+  template:
+    dest: /etc/hadoop/core-site.xml
+    src: templates/core-site.xml.j2
+
+
+- copy:
+    dest: /etc/hadoop/hdfs-site.xml
+    content: |
+      <?xml version="1.0"?>
+      <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+      <configuration>
+      <property><name>dfs.data.dir</name>
+      <value>/myfolder</value>
+      </property>
+      </configuration>
+
+- name: Formatting data node
+  shell: hadoop datanode - format
+  ignore_errors: true
+
+- name: Starting data node
+  shell: hadoop-daemon.sh start datanode

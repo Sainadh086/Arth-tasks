@@ -1,0 +1,33 @@
+- name: Running the previous
+  import_playbook: docker.yml
+
+
+- name: Starting with new task 
+  hosts: vb
+  tasks:
+    - name: Retriving the docker info
+      docker_container_info:
+        name: web
+      register: INFO
+
+    - name: Container IP
+      debug:
+        var: INFO.container.NetworkSettings.IPAddress
+
+    - name: Updating docker IP in inventory file
+      blockinfile:
+        path: "/root/ip.txt"
+        block: |
+          [docker]
+          {{ INFO.container.NetworkSettings.IPAddress }} ansible_ssh_user=root ansible_ssh_pass=redhat
+      delegate_to: localhost
+
+- hosts: docker
+  tasks:
+    - name: Writing a HTML file
+      blockinfile:
+         path: "/var/www/html/index.html"
+         block: |
+           <br>
+           Updated with the help of the ip address<br>
+           Successfully Completed
