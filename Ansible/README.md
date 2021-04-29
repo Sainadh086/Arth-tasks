@@ -2,7 +2,7 @@
 
 - This repo consists of ansible tasks
 
-#### Docker tasks
+#### Tasks Implemented
 
 	- Configuring Docker and exposing webpage with apache webserver on docker -> dock.yml
 	- Configuring Hadoop Cluster -> hadoop.yml
